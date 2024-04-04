@@ -9,6 +9,33 @@ class Organization(models.Model):
     def __str__(self):
         return self.name
 
+    def get_full_info(self):
+        organization_data_passports = self.datapassport_set.all()
+        full_info = f'Organization Name: {self.name}\n'
+        for passport in organization_data_passports:
+            full_info += f'Object Name: {passport.object_name}\n'
+            full_info += f'Data Level: {passport.DATA_LEVEL}\n'
+            full_info += f'Storage Method: {passport.storage_method}\n'
+            full_info += f'Data Form: {passport.data_form}\n'
+            full_info += f'Data Access: {passport.data_access}\n'
+            full_info += f'Users According to NPA: {passport.users_according_to_npa}\n'
+            full_info += f'Data Source According to NPA: {passport.data_source_according_to_npa}\n'
+            full_info += f'Actual Data Sources: {passport.actual_data_sources}\n'
+            full_info += f'Description Objects: {passport.description_objects}\n'
+            full_info += f'Update Frequency: {passport.update_frequency}\n'
+            full_info += f'Update Schedule: {passport.update_schedule}\n'
+            full_info += f'Update Order: {passport.update_order}\n'
+            full_info += f'NPA List for Data Collection and Processing: {passport.npa_list_for_data_collection_and_processing}\n'
+            full_info += f'NPA List for Data Entry and Consumption: {passport.npa_list_for_data_entry_and_consumption}\n'
+            full_info += f'NPA List for Data Entry and Consumption Restrictions: {passport.npa_list_for_data_entry_and_consumption_restrictions}\n'
+            full_info += f'Data Class: {passport.data_class}\n'
+            full_info += f'Creation Date: {passport.creation_date}\n\n'
+        return full_info
+
+    class Meta:
+        verbose_name = "Организация"
+        verbose_name_plural = "Организации"
+
 
 class DataPassport(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
