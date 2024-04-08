@@ -2,14 +2,14 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from .swagger import schema_view
-from .views import DigitalDataViewSet, AttributeDataViewSet, ReferenceInfoViewSet
+from .views import *
 
 app_name = 'app'
 
 router = DefaultRouter()
-router.register(r'digital-data', DigitalDataViewSet)
-router.register(r'attribute-data', AttributeDataViewSet)
-router.register(r'reference-info', ReferenceInfoViewSet)
+router.register(r'passport', PassportViewSet)
+router.register(r'passport-data-structure', PassportDataStructureViewSet)
+
 
 urlpatterns = [
     path('', include(router.urls)),

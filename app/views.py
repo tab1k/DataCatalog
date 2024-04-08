@@ -4,16 +4,12 @@ from .models import *
 from .serializers import *
 
 
-class DigitalDataViewSet(viewsets.ModelViewSet):
-    queryset = DigitalData.objects.all()
-    serializer_class = DigitalDataSerializer
+class PassportViewSet(viewsets.ModelViewSet):
+    queryset = Passport.objects.all()
+    serializer_class = PassportSerializer
 
 
-class AttributeDataViewSet(viewsets.ModelViewSet):
-    queryset = AttributeData.objects.all()
-    serializer_class = AttributeDataSerializer
+class PassportDataStructureViewSet(viewsets.ModelViewSet):
+    queryset = PassportDataStructure.objects.all()
+    serializer_class = PassportDataStructureSerializer
 
-
-class ReferenceInfoViewSet(viewsets.ModelViewSet):
-    queryset = ReferenceInfo.objects.all()
-    serializer_class = ReferenceInfoSerializer

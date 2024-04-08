@@ -1,61 +1,89 @@
 from django.db import models
 from .information import *
+from django.contrib.auth.models import User
 
 
-class DigitalData(models.Model):
-    type_data_object = models.CharField(choices=TYPE_OF_DATA, max_length=255)
-    name_data_object = models.CharField(choices=NAME_DATA_OBJECT, max_length=255)
-    description_data_object = models.CharField(max_length=255)
-
-    def __str__(self):
-        return f'{self.type_data_object} {self.name_data_object}'
-
-    def get_full_info(self):
-        attribute_data_list = self.attributedata_set.all()
-        reference_info_list = self.referenceinfo_set.all()
-
-        full_info = f'{self.type_data_object} {self.name_data_object} {self.description_data_object}\n'
-
-        for attribute_data in attribute_data_list:
-            full_info += f'Данные атрибута: {attribute_data.last_name} {attribute_data.first_name} {attribute_data.num_doc}\n'
-
-        for reference_info in reference_info_list:
-            full_info += f'Справочная информация: {reference_info.info}\n'
-
-        return full_info
-
-    class Meta:
-        verbose_name = 'Цифровые данные'
-        verbose_name_plural = 'Цифровые данные'
+# Create your models here.
 
 
-class AttributeData(models.Model):
-    digital_data = models.ForeignKey(DigitalData, on_delete=models.CASCADE)
-    last_name = models.CharField(max_length=255)
-    first_name = models.CharField(max_length=255)
-    third_name = models.CharField(max_length=255)
-    date_of_birth = models.DateField()
-    gender = models.CharField(choices=GENDER_DATA_OBJECT, max_length=255)
-    num_doc = models.BigIntegerField(blank=False, null=True)
+class Passport(models.Model):
 
-    def __str__(self):
-        return f'{self.last_name} {self.first_name} {self.digital_data} {self.num_doc}'
+    name = models.CharField(max_length=255) # Наименованаие оргаанизации
 
-    class Meta:
-        verbose_name = 'Данные атрибута'
-        verbose_name_plural = 'Данные атрибутов'
+    data_source = models.CharField(max_length=255, default="FRSP") # Наименоваание объекта информатизации осуществляющий сбор и обработку данных
 
+    level_use_data = models.CharField(choices=LEVEL_USE_DATA_CHOICES, max_length=255) # Уровень межведомственного использоваания
 
-class ReferenceInfo(models.Model):
-    digital_data = models.ForeignKey(DigitalData, on_delete=models.CASCADE)
-    info = models.TextField()
+    choice_type_data = models.CharField(choices=CHOICE_TYPE_DATA_CHOICES, max_length=255) # Способ введения данных
+
+    data_type = models.CharField(choices=PERM_DATA_CHOICES, max_length=255) # Форма данных
+
+    perm_data = models.CharField(choices=PERM_DATA_CHOICES, max_length=255) # Доступность данных
+
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owned_passports') # Владелец данных
+
+    users = models.ManyToManyField(User, related_name='accessible_passports') # Пользователь данных
+
+    npa = models.TextField() # Источник данных согласно НПА
+
+    data_object = models.CharField(choices=DATA_OBJECT_CHOICES, max_length=255) # Объект описания
+
+    period_update = models.CharField(choices=PERIOD_UPDATE_CHOICES, max_length=255) # Периодичность обновления
+
+    graph_update = models.TextField(max_length=255) # График обновления
+
+    len_update = models.TextField(max_length=255) # Порядок обновления
+
+    npa_collection = models.TextField() # Перечень НПА регламинтирующий сбор и обработку
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        max_length = 50
-        truncated_info = self.info[:max_length] + ('...' if len(self.info) > max_length else '')
-        return f'{self.digital_data} {truncated_info}'
+        return self.name
 
     class Meta:
-        verbose_name = 'Справочная информация'
-        verbose_name_plural = 'Справочные информации'
+        verbose_name = "Паспорт"
+        verbose_name_plural = "Паспорты"
+
+
+class PassportDataStructure(models.Model):
+
+    passport = models.ForeignKey(to=Passport, on_delete=models.CASCADE)
+
+    information_system_name = models.CharField(choices=INFORMATION_SYSTEM_CHOICES, max_length=255)
+
+    bd_name = models.CharField(choices=BD_NAME_CHOICES, max_length=255)
+
+    schema_name = models.CharField(max_length=255)
+
+    table_name = models.CharField(max_length=255)
+
+    table_description = models.TextField()
+
+    table_type = models.CharField(max_length=255)
+
+    column_id = models.IntegerField()
+
+    column_name = models.CharField(max_length=255)
+
+    column_type = models.CharField(max_length=255)
+
+    column_description = models.TextField()
+
+    reference_tbl_clmn = models.URLField(blank=True, null=True)
+
+    flk = models.CharField(max_length=255)
+
+    clmn_key_type = models.CharField(max_length=255)
+
+    teg = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.table_name
+
+    class Meta:
+        verbose_name = "Описание структуры данных"
+        verbose_name_plural = "Описание структуры данных"
+
 
