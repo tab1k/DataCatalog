@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     # Приложения к Требованиям по управлению данными Форма
     "app.apps.AppConfig",
+    "users.apps.UsersConfig",
 
     # Главная
     "main.apps.MainConfig",

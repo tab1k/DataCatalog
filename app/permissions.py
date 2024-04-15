@@ -1,10 +1,9 @@
 from rest_framework import permissions
 
 
-class IsAdminUser(permissions.BasePermission):
+class IsInAdminOrDepartmentGroup(permissions.BasePermission):
     """
-    Проверка, является ли пользователь администратором.
+    Проверка, находится ли пользователь в группе 'Администраторы' или 'Департаменты'.
     """
-
     def has_permission(self, request, view):
-        return request.user and request.user.is_staff
+        return request.user.groups.filter(name__in=['Администраторы', 'Департаменты']).exists()

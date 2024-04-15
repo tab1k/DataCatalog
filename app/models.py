@@ -3,8 +3,6 @@ from .information import *
 from django.contrib.auth.models import User
 
 
-# Create your models here.
-
 
 class Passport(models.Model):
 
