@@ -99,7 +99,7 @@ class BusinessGlossary(models.Model):
     hyperlink = models.TextField()
     term_status = models.CharField(max_length=255, choices=TERM_STATUS_CHOICES)
     availability_of_the_term = models.BooleanField(default=False)
-    passport_data_structure = models.ForeignKey(to=PassportDataStructure, on_delete=models.CASCADE)
+    passport_data_structure = models.ForeignKey(to=Passport, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
