@@ -27,36 +27,52 @@ class BusinessGlossaryViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
 
 
+
 class SearchResultsAPIView(ListAPIView):
     serializer_class = SearchResultsSerializer
     filter_backends = [SearchFilter]
-    search_fields = ['name', 'owner__username', 'passportdatastructure__passport__name' ,'passportdatastructure__table_name', 'businessglossary__name', 'businessglossary__termin']
+    search_fields = ['name', 'owner__username', 'passportdatastructure__passport__name', 'passportdatastructure__table_name', 'businessglossary__name', 'businessglossary__termin']
 
     def get_queryset(self):
         query = self.request.query_params.get('search', '')
 
+        # Create an empty queryset
+        queryset = Passport.objects.none()
+
+        # Filter passports
         passports = Passport.objects.filter(name__icontains=query).annotate(
             name_annotated=F('name'),
-            owner_annotated=F('owner')
+            owner_annotated=F('owner__username')
         ).values('name_annotated', 'owner_annotated')
 
+        # Filter passport data structures
         structures = PassportDataStructure.objects.filter(table_name__icontains=query).annotate(
-            passport_annotated=F('passport'),
+            passport_annotated=F('passport__name'),
             table_name_annotated=F('table_name')
         ).values('passport_annotated', 'table_name_annotated')
 
+        # Filter business glossaries
         glossaries = BusinessGlossary.objects.filter(name__icontains=query).annotate(
             name_annotated=F('name'),
             termin_annotated=F('termin')
         ).values('name_annotated', 'termin_annotated')
 
-        # Combine QuerySets for each model into one
-        combined_queryset = list(chain(passports, structures, glossaries))
+        # Combine querysets
+        for passport in passports:
+            queryset |= Passport.objects.filter(name=passport['name_annotated'], owner__username=passport['owner_annotated'])
 
-        # Convert the combined list into a QuerySet
-        queryset = Passport.objects.none().union(*combined_queryset)
+        for structure in structures:
+            queryset |= PassportDataStructure.objects.filter(passport__name=structure['passport_annotated'], table_name=structure['table_name_annotated'])
 
-        return queryset
+        for glossary in glossaries:
+            queryset |= BusinessGlossary.objects.filter(name=glossary['name_annotated'], termin=glossary['termin_annotated'])
+
+        return queryset.distinct()
+
+
+
+
+
 
 
 
