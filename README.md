@@ -33,7 +33,7 @@
 
 # Графа реализации моделей для DataCatalog:
 
-![Модели](static/database_diagrams/data_catalog_db_schema.png)
+![Модели](static/database_diagrams/models.png)
 
 Продолжение следует...
 
