@@ -14,5 +14,6 @@ router.register(r'business-glossary', BusinessGlossaryViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('search/', SearchResultsAPIView.as_view(), name='search_results'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
