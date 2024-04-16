@@ -49,3 +49,8 @@ BD_NAME_CHOICES = (
     ('oracle', 'Oracle'),
     ('firebase', 'Firebase'),
 )
+
+TERM_STATUS_CHOICES = (
+    ('valid', 'Действующий'),
+    ('invalid', 'Не действующий'),
+)

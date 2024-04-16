@@ -14,3 +14,7 @@ class PassportDataStructureSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class BusinessGlossarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BusinessGlossary
+        fields = '__all__'

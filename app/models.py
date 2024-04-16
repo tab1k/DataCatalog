@@ -85,3 +85,31 @@ class PassportDataStructure(models.Model):
         verbose_name_plural = "Описание структуры данных"
 
 
+class BusinessGlossary(models.Model):
+    name = models.CharField(max_length=255)
+    termin = models.TextField()
+    national_name = models.TextField()
+    alternative_name = models.TextField()
+    acronym = models.TextField()
+    abbreviation = models.TextField()
+    previous_title = models.TextField()
+    definition = models.TextField()
+    definition_source = models.TextField()
+    details = models.TextField()
+    hyperlink = models.TextField()
+    term_status = models.CharField(max_length=255, choices=TERM_STATUS_CHOICES)
+    availability_of_the_term = models.BooleanField(default=False)
+    passport_data_structure = models.ForeignKey(to=PassportDataStructure, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+    def get_availability_of_the_term(self):
+        return "Да" if self.availability_of_the_term else "Нет"
+
+    class Meta:
+        verbose_name = "Бизнес Глоссарий"
+        verbose_name_plural = "Бизнес Глоссарий"
+
+
+

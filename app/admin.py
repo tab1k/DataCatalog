@@ -16,5 +16,13 @@ class PassportDataStructureAdmin(admin.ModelAdmin):
     ordering = ['-passport__name']  # Сортировка записей по умолчанию
 
 
+class BusinessGlossaryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'termin', 'national_name', 'alternative_name', 'acronym', 'abbreviation', 'previous_title', 'definition', 'definition_source']  # Отображаемые поля в списке записей
+    list_filter = ['name', 'termin', 'national_name', 'alternative_name', 'acronym']  # Фильтры для списка записей
+    search_fields = ['name', 'termin', 'term_status', 'availability_of_the_term']  # Поля для поиска
+    ordering = ['-name']  # Сортировка записей по умолчанию
+
+
+admin.site.register(BusinessGlossary, BusinessGlossaryAdmin)
 admin.site.register(PassportDataStructure, PassportDataStructureAdmin)
 admin.site.register(Passport, PassportAdmin)

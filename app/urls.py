@@ -9,6 +9,7 @@ app_name = 'app'
 router = DefaultRouter()
 router.register(r'passport', PassportViewSet)
 router.register(r'passport-data-structure', PassportDataStructureViewSet)
+router.register(r'business-glossary', BusinessGlossaryViewSet)
 
 
 urlpatterns = [
