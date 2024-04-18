@@ -6,7 +6,13 @@ from django.contrib.auth.models import User
 
 class Passport(models.Model):
 
-    name = models.CharField(max_length=255) # Наименованаие оргаанизации
+    name = models.CharField(max_length=255) # Наименованаие организации
+
+    report_title = models.TextField(blank=True, null=True)
+
+    administrative_data = models.TextField(blank=True, null=True)
+
+    frequency = models.CharField(max_length=255, choices=FREQUENCY_CHOICES, blank=True, null=True)
 
     data_source = models.CharField(max_length=255, default="FRSP") # Наименоваание объекта информатизации осуществляющий сбор и обработку данных
 
@@ -33,6 +39,12 @@ class Passport(models.Model):
     len_update = models.TextField(max_length=255) # Порядок обновления
 
     npa_collection = models.TextField() # Перечень НПА регламинтирующий сбор и обработку
+
+    persons = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='Респонденты', blank=True, null=True)
+
+    deadline = models.TextField(blank=True, null=True)
+
+    sector = models.CharField(max_length=255, choices=SECTOR_CHOICES, blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

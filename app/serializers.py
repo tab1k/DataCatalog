@@ -26,3 +26,5 @@ class SearchResultsSerializer(serializers.Serializer):
     passport = serializers.CharField(required=False)
     table_name = serializers.CharField(required=False)
     termin = serializers.CharField(required=False)
+    model_name = serializers.CharField()
+    model_id = serializers.CharField()

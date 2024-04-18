@@ -54,3 +54,16 @@ TERM_STATUS_CHOICES = (
     ('valid', 'Действующий'),
     ('invalid', 'Не действующий'),
 )
+
+FREQUENCY_CHOICES = (
+    ('monthly', 'ежемесячная'),
+    ('quarterly', 'ежеквартальная'),
+    ('semi', 'полугодичная'),
+)
+
+SECTOR_CHOICES = (
+    ('bvu', 'БВУ'),
+    ('so', 'СО'),
+    ('rcb', 'РЦБ'),
+    ('mfo', 'МФО')
+)

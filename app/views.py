@@ -1,12 +1,11 @@
-from django.shortcuts import render
 from rest_framework import viewsets
-from rest_framework.generics import ListAPIView
 from rest_framework.permissions import AllowAny
-from itertools import chain
 from .serializers import *
-from .permissions import *
-from django.db.models import Q, F
-from rest_framework.filters import SearchFilter
+from itertools import chain
+from django.db.models import Q, Value, CharField, F
+from rest_framework.generics import ListAPIView
+from .models import Passport, PassportDataStructure, BusinessGlossary
+from .serializers import SearchResultsSerializer
 
 
 class PassportViewSet(viewsets.ModelViewSet):
@@ -30,10 +29,10 @@ class BusinessGlossaryViewSet(viewsets.ModelViewSet):
 
 from itertools import chain
 from django.db.models import Q, Value, CharField
+from django.db.models.functions import Concat
 from rest_framework.generics import ListAPIView
 from .models import Passport, PassportDataStructure, BusinessGlossary
 from .serializers import SearchResultsSerializer
-
 
 class SearchResultsAPIView(ListAPIView):
     serializer_class = SearchResultsSerializer
@@ -44,17 +43,26 @@ class SearchResultsAPIView(ListAPIView):
         # Filter passports
         passports = Passport.objects.filter(
             Q(name__icontains=query) | Q(owner__username__icontains=query)
-        ).annotate(model_name=Value('Passport', output_field=CharField()))
+        ).annotate(
+            model_name=Value('Passport', output_field=CharField()),
+            model_id=F('id')
+        )
 
         # Filter passport data structures
         structures = PassportDataStructure.objects.filter(
             table_name__icontains=query
-        ).annotate(model_name=Value('PassportDataStructure', output_field=CharField()))
+        ).annotate(
+            model_name=Value('PassportDataStructure', output_field=CharField()),
+            model_id=F('id')
+        )
 
         # Filter business glossaries
         glossaries = BusinessGlossary.objects.filter(
             Q(name__icontains=query) | Q(termin__icontains=query)
-        ).annotate(model_name=Value('BusinessGlossary', output_field=CharField()))
+        ).annotate(
+            model_name=Value('BusinessGlossary', output_field=CharField()),
+            model_id=F('id')
+        )
 
         # Combine and return the results
         return list(chain(passports, structures, glossaries))
