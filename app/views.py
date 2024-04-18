@@ -26,14 +26,6 @@ class BusinessGlossaryViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
 
 
-
-from itertools import chain
-from django.db.models import Q, Value, CharField
-from django.db.models.functions import Concat
-from rest_framework.generics import ListAPIView
-from .models import Passport, PassportDataStructure, BusinessGlossary
-from .serializers import SearchResultsSerializer
-
 class SearchResultsAPIView(ListAPIView):
     serializer_class = SearchResultsSerializer
 
