@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # Приложения к Требованиям по управлению данными Форма
     "app.apps.AppConfig",
     "users.apps.UsersConfig",
+    'django_elasticsearch_dsl',
 
     # Главная
     "main.apps.MainConfig",
@@ -122,6 +123,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'localhost:9200'  # Здесь укажите адрес Elasticsearch
+    },
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -152,6 +159,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CORS_ALLOWED_ORIGINS = [
     "https://datacatalogtest.finreg.kz",
 ]
+
+LOGIN_REDIRECT_URL = '/api/passports/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

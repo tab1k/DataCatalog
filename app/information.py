@@ -67,3 +67,4 @@ SECTOR_CHOICES = (
     ('rcb', 'РЦБ'),
     ('mfo', 'МФО')
 )
+

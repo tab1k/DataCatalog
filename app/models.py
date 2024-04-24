@@ -3,7 +3,6 @@ from .information import *
 from django.contrib.auth.models import User
 
 
-
 class Passport(models.Model):
 
     name = models.CharField(max_length=255) # Наименованаие организации
@@ -20,7 +19,7 @@ class Passport(models.Model):
 
     choice_type_data = models.CharField(choices=CHOICE_TYPE_DATA_CHOICES, max_length=255) # Способ введения данных
 
-    data_type = models.CharField(choices=PERM_DATA_CHOICES, max_length=255) # Форма данных
+    data_type = models.CharField(choices=DATA_TYPE_CHOICES, max_length=255) # Форма данных
 
     perm_data = models.CharField(choices=PERM_DATA_CHOICES, max_length=255) # Доступность данных
 
@@ -45,6 +44,7 @@ class Passport(models.Model):
     deadline = models.TextField(blank=True, null=True)
 
     sector = models.CharField(max_length=255, choices=SECTOR_CHOICES, blank=True, null=True)
+
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

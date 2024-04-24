@@ -1,17 +1,35 @@
 from rest_framework import viewsets
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny
 from .serializers import *
 from itertools import chain
 from django.db.models import Q, Value, CharField, F
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView
 from .models import Passport, PassportDataStructure, BusinessGlossary
 from .serializers import SearchResultsSerializer
 
 
+class CustomPagination(PageNumberPagination):
+    page_size = 10
+
+
 class PassportViewSet(viewsets.ModelViewSet):
-    queryset = Passport.objects.all()
+    queryset = Passport.objects.select_related('owner').all()
     serializer_class = PassportSerializer
+    pagination_class = CustomPagination
     permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        sector = self.request.query_params.get('sector', None)
+        queryset = Passport.objects.select_related('owner')
+        if sector:
+            queryset = queryset.filter(sector=sector)
+        return queryset
+
+
+class PassportDetailAPIView(RetrieveUpdateAPIView):
+    queryset = Passport.objects.select_related('owner').all()
+    serializer_class = PassportSerializer
 
 
 class PassportDataStructureViewSet(viewsets.ModelViewSet):
